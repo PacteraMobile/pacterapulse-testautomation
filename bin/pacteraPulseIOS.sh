@@ -32,7 +32,7 @@ xcodebuild -workspace PacteraPulse.xcworkspace -scheme PacteraPulse -sdk iphones
 #copy app file to root of Test project folder
 find . -name PacteraPulse.app | xargs -I{} cp -r {} ${WORKSPACE}/PacteraPulseTest
 #remove the build folder after building
-rm -rf build
+#rm -rf build
 #enter into the Test project folder
 cd ${WORKSPACE}/PacteraPulseTest
 #undate gem libray
