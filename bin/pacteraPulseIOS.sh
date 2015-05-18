@@ -18,7 +18,7 @@ else
 fi
 
 #enter into the PacteraPulse workspace
-cd ${WORKSPACE}/pacterapulseIOS/PacteraPulse
+cd ${WORKSPACE}/pacterapulseIOS
 #This project uses CocoaPods for dependancy Management, install the dependancy first
 pod install
 #install xctool 
