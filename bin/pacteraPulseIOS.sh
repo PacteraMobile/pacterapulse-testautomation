@@ -39,4 +39,5 @@ cd ${WORKSPACE}/PacteraPulseTest
 bundle update
 #run test case
 PLATFORM=iOS rspec spec/lib/u_i_pacteraPlus.rb --require ./format/custom_formatter.rb --format CustomFormatter --out report.html
+cd ${WORKSPACE}/
 
