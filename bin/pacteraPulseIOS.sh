@@ -27,6 +27,8 @@ if ! type xctool >/dev/null 2>&1 ;then
 fi
 #unit test
 xctool -workspace PacteraPulse.xcworkspace -scheme PacteraPulse -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 6' -reporter junit:${WORKSPACE}/pacteraPulseJUnit.xml test
+#Code Coverage
+${WORKSPACE}/pacterapulseIOS/Pods/XcodeCoverage/getcov -x -o ${WORKSPACE}
 #build the project
 xcodebuild -workspace PacteraPulse.xcworkspace -scheme PacteraPulse -sdk iphonesimulator -configuration Debug -derivedDataPath ./build build
 #copy app file to root of Test project folder
