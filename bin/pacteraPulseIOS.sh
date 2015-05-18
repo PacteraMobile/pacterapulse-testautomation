@@ -30,13 +30,13 @@ xctool -workspace PacteraPulse.xcworkspace -scheme PacteraPulse -sdk iphonesimul
 #build the project
 xcodebuild -workspace PacteraPulse.xcworkspace -scheme PacteraPulse -sdk iphonesimulator -configuration Debug -derivedDataPath ./build build
 #copy app file to root of Test project folder
-find . -name PacteraPulse.app | xargs -I{} cp -r {} ${WORKSPACE}/PacteraPulseTest/PacteraPulseIOS
+find . -name PacteraPulse.app | xargs -I{} cp -r {} ${WORKSPACE}/PacteraPulseTest
 #remove the build folder after building
 rm -rf build
 #enter into the Test project folder
-cd ${WORKSPACE}/PacteraPulseTest/PacteraPulseIOS
+cd ${WORKSPACE}/PacteraPulseTest
 #undate gem libray
 bundle update
 #run test case
-rspec spec/lib/u_i_pacteraPlus.rb --require ./format/custom_formatter.rb --format CustomFormatter --out report.html
+PLATFORM=iOS rspec spec/lib/u_i_pacteraPlus.rb --require ./format/custom_formatter.rb --format CustomFormatter --out report.html
 
