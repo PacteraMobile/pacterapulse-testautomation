@@ -19,16 +19,25 @@ require 'net/http'
 
 
 
-APP_PATH = './PacteraPulse.app'
+
+#APP_PATH = '/Users/randysun/Desktop/certificate_Apple/PacteraPulse.app'
+#ANDROID_APP_PATH = '/Users/randysun/Desktop/certificate_Apple/PacPulse.apk'
 #appium -U cf2b7df852cafea74095ee487c9191744ef10d39 --app /Users/jin/Desktop/PacteraPulse.ipa
 #appium &
+require File.join(File.dirname(__FILE__), '.', 'generalDefines')
+
 def desired_caps
   {
     caps: {
-      platformName: 'iOS',
-       deviceName:  'iPhone 6',
-       versionNumber:  '8.1',
-       app: APP_PATH
+      platformName: ENV["PLATFORM"],
+      deviceName:  getDeviceName(),
+      versionNumber:  getVersionNumber(),
+      app: getPackageName()
+      
+#      platformName: 'Android',
+#      platformVersion: '5.1',
+#      deviceName:       'Android Emulator',
+#      app: ANDROID_APP_PATH
 
        # platformName: 'iOS',
        # deviceName:  'iPhone 5s',
@@ -43,24 +52,38 @@ def desired_caps
   }
 end
 
+
+
+
 describe 'PacteraPulse UI' do
 	@error = false
 	before(:all) do
     	Appium::Driver.new(desired_caps).start_driver
     	Appium.promote_appium_methods RSpec::Core::ExampleGroup
+      
 	end
+	
+  
 
 	def back_click(opts={})
 		opts ||= {}
 		search_wait = opts.fetch(:wait, 10) # seconds
-		wait(search_wait) { button_exact('Back').click }
+		wait(search_wait) { 
+		  
+		  
+      if( ENV["PLATFORM"] == 'iOS') then
+        button_exact('Back').click
+      else
+        back()
+      end		
+		}
 	end
 
 	def check_error()
 		set_wait 1
-		alertView = find_elements(:class_name,'UIAAlert')
+		alertView = getGeneralAlert()
 		if alertView.any?
-			find_element(:name, 'OK').click
+      getOkButtonInAlert().click
 			@error = true
 		else 
 			@error = false
@@ -72,33 +95,51 @@ describe 'PacteraPulse UI' do
 
 	describe 'FirstTime Launch', :one do
 		after :all do
-			startButton = find_elements(:name, 'Tap to start')
+			startButton = getStartInWelcome()
 			if startButton.any?
 				startButton[0].click
 			end
 		end
 
 		it "can have a start Page on first launch, otherwise can't be seen", :filePath=> 'screenshot/1.png' do
-			startButton = find_elements(:name, 'Tap to start')
+			startButton = getStartInWelcome()
 			screenshot = driver.screenshot_as :base64
 			screenshot("./screenshot/1.png")
-			if startButton.any?
-				startButton[0].displayed?.should be true
-			else
-				startButton[0].should be nil
-			end
+			#if startButton.any?
+			#	startButton[0].displayed?.should be true
+			#else
+			#	startButton[0].should be nil
+			#end
+			startButton.displayed?.should be true
 		end
 	end
 
 	describe 'Back to Welcome page' do
 		after :all do
-			if find_element(:name, 'Tap to start') != nil
-				find_element(:name, 'Tap to start').click
+			if getStartInWelcome() != nil
+        getStartInWelcome().click
 			end
 		end
 		it 'can back to the welcome page',:filePath=> 'screenshot/2.png' do
-			find_element(:name, 'Info').click
-			startButton = find_element(:name, 'Tap to start')
+		  
+      if( ENV["PLATFORM"] == 'iOS') then
+        getStartInWelcome().click
+        set_wait 2
+        getBackButtonInVote().click
+      else
+        getStartInWelcome().click
+        set_wait 2
+        screenshot = driver.screenshot_as :base64
+        screenshot("./screenshot/2.png") 
+        #no back here since android app didn't have this feature now
+        #back() 
+        #getBackButtonInVote().click
+      end 
+
+      
+      set_wait 1
+      #find_element(:name, 'Info').click
+			startButton = getStartInWelcome()
 			startButton.click
 			screenshot = driver.screenshot_as :base64
 			screenshot("./screenshot/2.png")			
@@ -114,12 +155,13 @@ describe 'PacteraPulse UI' do
 		it 'can be in the voting page' ,:filePath=> 'screenshot/3.png' do
 			screenshot = driver.screenshot_as :base64
 			screenshot("./screenshot/3.png")
-			votingMainPage = find_element(:class_name, 'UIATableView')
+			votingMainPage = getInsideVote
 			votingMainPage.should_not be_nil;
 		end
 
 		it 'can vote happy emotion',:filePath=> 'screenshot/4.png' do
-			find_elements(:class_name, "UIATableCell")[2].click
+			#find_elements(:class_name, "UIATableCell")[2].click
+			getHappyButton().click
 			screenshot = driver.screenshot_as :base64
 			screenshot("./screenshot/4.png")
 			check_error
@@ -132,8 +174,8 @@ describe 'PacteraPulse UI' do
      		back_click
     	end
 		it 'can click result button' ,:filePath=> 'screenshot/4.png' do
-			find_element(:name, 'Share').click
-			reusltPage = find_element(:name,'24 Hours Results')
+      getReslutButtonInVote().click
+			reusltPage = getInsideResult()
 			screenshot = driver.screenshot_as :base64
 			screenshot("./screenshot/4.png")
 			check_error
@@ -150,7 +192,8 @@ describe 'PacteraPulse UI' do
      		set_wait 3
     	end
 		it 'can click happy button',:filePath=> 'screenshot/5.png'  do
-			find_elements(:class_name, "UIATableCell")[2].click
+			#find_elements(:class_name, "UIATableCell")[2].click
+      getHappyButton().click
 			screenshot = driver.screenshot_as :base64
 			screenshot("./screenshot/5.png")
 			check_error
@@ -161,7 +204,9 @@ describe 'PacteraPulse UI' do
 
 
 		it 'can click unHappy button',:filePath=> 'screenshot/6.png'  do
-			find_elements(:class_name, "UIATableCell")[1].click
+      
+      getUnhappyButton().click
+			#find_elements(:class_name, "UIATableCell")[1].click
 			screenshot = driver.screenshot_as :base64
 			screenshot("./screenshot/6.png")
 			check_error
@@ -171,7 +216,8 @@ describe 'PacteraPulse UI' do
 		end
 
 		it 'can click soso button',:filePath=> 'screenshot/7.png'  do
-			find_elements(:class_name, "UIATableCell")[0].click
+			#find_elements(:class_name, "UIATableCell")[0].click
+      getNetrualButton().click
 			screenshot = driver.screenshot_as :base64
 			screenshot("./screenshot/7.png")
 			check_error
