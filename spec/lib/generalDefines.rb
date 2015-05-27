@@ -15,7 +15,7 @@ end
 
 def getDeviceName()
   if( ENV["PLATFORM"] == 'iOS') then
-    return 'iPhone 6'
+    return 'iPhone 6 Plus'
   else
     return 'Android Emulator'
   end
@@ -53,7 +53,7 @@ end
 #Welcome page
 def getStartInWelcome()
   if( ENV["PLATFORM"] == 'iOS') then
-    return find_element(:name, 'Tap to start')
+    return find_elements(:name, 'Tap to start')
   else
     return find_element(:id, 'com.pactera.pacterapulseopensourceandroid:id/textView')
   end
