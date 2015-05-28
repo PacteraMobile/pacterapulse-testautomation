@@ -20,10 +20,6 @@ require 'net/http'
 
 
 
-#APP_PATH = '/Users/randysun/Desktop/certificate_Apple/PacteraPulse.app'
-#ANDROID_APP_PATH = '/Users/randysun/Desktop/certificate_Apple/PacPulse.apk'
-#appium -U cf2b7df852cafea74095ee487c9191744ef10d39 --app /Users/jin/Desktop/PacteraPulse.ipa
-#appium &
 require File.join(File.dirname(__FILE__), '.', 'generalDefines')
 
 def desired_caps
@@ -34,15 +30,6 @@ def desired_caps
       versionNumber:  getVersionNumber(),
       app: getPackageName()
       
-#      platformName: 'Android',
-#      platformVersion: '5.1',
-#      deviceName:       'Android Emulator',
-#      app: ANDROID_APP_PATH
-
-       # platformName: 'iOS',
-       # deviceName:  'iPhone 5s',
-       # uuid: 'cf2b7df852cafea74095ee487c9191744ef10d39',
-       # app:'/Users/jin/Desktop/PacteraPulse.ipa',
     },
     appium_lib: {
       sauce_username: nil, # don't run on sauce
@@ -131,13 +118,13 @@ describe 'PacteraPulse UI' do
 			if webviews.any?
 				webview = webviews[0]
 				inputfields =  webview.find_element(:name,"User account")
-				inputfields.type('mobiletest@pactera.com.au')
+				inputfields.type(getStaticUserName())
 				sleep 5
 				password = webview.find_element(:name, 'Password')
 	     		sleep 1
 	     		password.click
 	     		sleep 1
-	     		password.type('11PacteraPulse')
+	     		password.type(getStaticPassword())
 	     		sleep 3
 			    title = webview.find_element(:name, 'PacteraPulseOpenSource')
 			    title.click

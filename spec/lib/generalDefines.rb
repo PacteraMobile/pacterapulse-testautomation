@@ -48,6 +48,57 @@ def getOkButtonInAlert()
   end  
 end
 
+#Authenticaton
+def getStaticUserName()
+  return "mobiletest@pactera.com.au"
+end
+def getStaticPassword()
+  return "11PacteraPulse"
+end
+
+def getAuthenPageInfo() 
+  if( ENV["PLATFORM"] == 'iOS') then
+      return find_element(:name, 'PacteraPulseOpenSource')
+    else
+      #return find_element(:id, 'com.pactera.pacterapulseopensourceandroid:id/textView')
+    end
+end
+
+def getAuthenUserName()
+  if( ENV["PLATFORM"] == 'iOS') then
+    #webview = find_elements(:class_name, 'UIAWebView')[0]  
+    webview = find_elements(:type, 'UIAWebView')[0]  
+    return webview.find_element(:name, 'User account')
+  else
+    #return find_element(:id, 'com.pactera.pacterapulseopensourceandroid:id/textView')
+  end
+end
+
+def getAuthenPassword()
+  if( ENV["PLATFORM"] == 'iOS') then
+    webview = find_element(:class_name, 'UIAWebView')
+    return webview.find_element(:name, 'Password')
+  else
+    #return find_element(:id, 'com.pactera.pacterapulseopensourceandroid:id/textView')
+  end
+end
+
+def getAuthenSignInBtn()
+  if( ENV["PLATFORM"] == 'iOS') then
+    return find_element(:name, 'Sign in')
+  else
+    #return find_element(:id, 'com.pactera.pacterapulseopensourceandroid:id/textView')
+  end  
+end
+
+def getAuthenCancelBtn()
+  if( ENV["PLATFORM"] == 'iOS') then
+    return find_element(:name, 'Cancel')
+  else
+    #return find_element(:id, 'com.pactera.pacterapulseopensourceandroid:id/textView')
+  end  
+end
+
 
 
 #Welcome page
