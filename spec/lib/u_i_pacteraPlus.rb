@@ -309,43 +309,47 @@ describe 'PacteraPulse UI' do
 	      sliders = find_elements(:class_name,'UIASlider')
 	      if sliders.any?
 		      if sliders[0].value == '20%'
-		  		  pointX = (sliders[0].size.width*0.2) + sliders[0].location.x 
+		  		  pointX = (sliders[0].size.width*0.2) + sliders[0].location.x
 			      pointY = puts sliders[0].location.y
-			      actions.press element: sliders[0], x:pointX , y: pointY
-				  actions.move_to element: sliders[0], x: (pointX + (sliders[0].size.width*0.2)), y: pointY
+			      actions.press element: sliders[0], x: pointX , y: 3
+				  actions.move_to element: sliders[0], x: (pointX + (sliders[0].size.width*0.2)), y: 3
 				  actions.release
 				  actions.perform	
 
-  		  		  pointX = (sliders[1].size.width*0.2) + sliders[1].location.x 
+				  sleep 1
+				  actions = Appium::TouchAction.new
+  		  		  pointX = (sliders[1].size.width*0.2) + sliders[1].location.x
 			      pointY = puts sliders[1].location.y
-			      actions.press element: sliders[1], x:pointX , y: pointY
-				  actions.move_to element: sliders[1], x: (pointX + (sliders[1].size.width*0.2)), y: pointY
+			      actions.press element: sliders[1], x: pointX , y: 3
+				  actions.move_to element: sliders[1], x: (pointX + (sliders[1].size.width*0.2)), y: 3
 				  actions.release
 				  actions.perform	
 
-  		  		  pointX = (sliders[2].size.width*0.2) + sliders[2].location.x 
-			      pointY = puts sliders[2].location.y
-			      actions.press element: sliders[2], x:pointX , y: pointY
-				  actions.move_to element: sliders[2], x: (pointX + (sliders[2].size.width*0.2)), y: pointY
+				  sleep 1
+				  actions = Appium::TouchAction.new
+  		  		  pointX = (sliders[2].size.width*0.2) + sliders[2].location.x
+			      pointY = sliders[2].location.y
+			      actions.press element: sliders[2], x: pointX , y: 3
+				  actions.move_to element: sliders[2], x: (pointX + (sliders[2].size.width*0.2)), y: 3
 				  actions.release
 				  actions.perform	
 
 		      elsif sliders[0].value == '50%'
-	  		  	  pointX = (sliders[0].size.width*0.5) + sliders[0].location.x 
-			      pointY = puts sliders[0].location.y
-			      actions.press element: sliders[0], x:pointX , y: pointY
-				  actions.move_to element: sliders[0], x: (pointX - (sliders[0].size.width*0.2)), y: pointY
-				  actions.release
-				  actions.perform	
+	  		 #  	  pointX = (sliders[0].size.width*0.5) + sliders[0].location.x 
+			   #    pointY = puts sliders[0].location.y
+			   #    actions.press element: sliders[0], x:pointX , y: pointY
+				  # actions.move_to element: sliders[0], x: (pointX - (sliders[0].size.width*0.2)), y: pointY
+				  # actions.release
+				  # actions.perform	
 		      elsif sliders[0].value == '70%'
-	  		  	  pointX = (sliders[0].size.width*0.7) + sliders[0].location.x 
-			      pointY = puts sliders[0].location.y
-			      actions.press element: sliders[0], x:pointX , y: pointY
-				  actions.move_to element: sliders[0], x: (pointX - (sliders[0].size.width*0.2)), y: pointY
-				  actions.release
-				  actions.perform	
+	  		 #  	  pointX = (sliders[0].size.width*0.7) + sliders[0].location.x 
+			   #    pointY = puts sliders[0].location.y
+			   #    actions.press element: sliders[0], x:pointX , y: pointY
+				  # actions.move_to element: sliders[0], x: (pointX - (sliders[0].size.width*0.2)), y: pointY
+				  # actions.release
+				  # actions.perform	
 		      end
-		    sliders[0].should_not be nil
+		    sliders[2].should_not be nil
 
 	     end
 		end
