@@ -131,13 +131,13 @@ describe 'PacteraPulse UI' do
 			if webviews.any?
 				webview = webviews[0]
 				inputfields =  webview.find_element(:name,"User account")
-				inputfields.type('martin.xiao@pactera.com.au')
+				inputfields.type('mobiletest@pactera.com.au')
 				sleep 5
 				password = webview.find_element(:name, 'Password')
 	     		sleep 1
 	     		password.click
 	     		sleep 1
-	     		password.type('P@cteraS19')
+	     		password.type('11PacteraPulse')
 	     		sleep 3
 			    title = webview.find_element(:name, 'PacteraPulseOpenSource')
 			    title.click
@@ -279,9 +279,8 @@ describe 'PacteraPulse UI' do
     	def moveSlider(slider,percentage,moveLength)
 	      actions = Appium::TouchAction.new
   		  pointX = (slider.size.width*percentage) + slider.location.x 
-	      pointY = slider.location.y
-	      actions.press element: slider, x:pointX , y: pointY
-		  actions.move_to element: slider, x: (pointX + (slider.size.width*0.2)), y: pointY
+	      actions.press element: slider, x:pointX , y: 3
+		  actions.move_to element: slider, x: (pointX + (slider.size.width*moveLength)), y: 3
 		  actions.release
 		  actions.perform	   	
     	end
@@ -295,8 +294,10 @@ describe 'PacteraPulse UI' do
 			end
 		end
 
-		it 'shoud navigate to voteDetail page' do
+		it 'shoud navigate to voteDetail page',:filePath=> 'screenshot/10.png'  do
 			moreInfo_button = find_element(:name,'More Info')
+		    screenshot = driver.screenshot_as :base64
+			screenshot("./screenshot/10.png")			
 			if moreInfo_button != nil
 				moreInfo_button.click
 				sleep 4
@@ -304,55 +305,47 @@ describe 'PacteraPulse UI' do
 			end
 		end
 
-		it 'sliders should be changed' do
+		it 'sliders should be changed',:filePath=> 'screenshot/11.png'  do
           actions = Appium::TouchAction.new
-	      sliders = find_elements(:class_name,'UIASlider')
-	      if sliders.any?
-		      if sliders[0].value == '20%'
-		  		  pointX = (sliders[0].size.width*0.2) + sliders[0].location.x
-			      pointY = puts sliders[0].location.y
-			      actions.press element: sliders[0], x: pointX , y: 3
-				  actions.move_to element: sliders[0], x: (pointX + (sliders[0].size.width*0.2)), y: 3
-				  actions.release
-				  actions.perform	
+          if moreInfo_button != nil
+	      	  sliders = find_elements(:class_name,'UIASlider')
+		      if sliders.any?
+			      if sliders[0].value == '20%'
+			      	  moveSlider(sliders[0],0.2,0.2)
+			      	  sleep 2
+			      	  moveSlider(sliders[1],0.2,0.2)
+			      	  sleep 2
+			      	  moveSlider(sliders[2],0.2,0.3)
 
-				  sleep 1
-				  actions = Appium::TouchAction.new
-  		  		  pointX = (sliders[1].size.width*0.2) + sliders[1].location.x
-			      pointY = puts sliders[1].location.y
-			      actions.press element: sliders[1], x: pointX , y: 3
-				  actions.move_to element: sliders[1], x: (pointX + (sliders[1].size.width*0.2)), y: 3
-				  actions.release
-				  actions.perform	
-
-				  sleep 1
-				  actions = Appium::TouchAction.new
-  		  		  pointX = (sliders[2].size.width*0.2) + sliders[2].location.x
-			      pointY = sliders[2].location.y
-			      actions.press element: sliders[2], x: pointX , y: 3
-				  actions.move_to element: sliders[2], x: (pointX + (sliders[2].size.width*0.2)), y: 3
-				  actions.release
-				  actions.perform	
-
-		      elsif sliders[0].value == '50%'
-	  		 #  	  pointX = (sliders[0].size.width*0.5) + sliders[0].location.x 
-			   #    pointY = puts sliders[0].location.y
-			   #    actions.press element: sliders[0], x:pointX , y: pointY
-				  # actions.move_to element: sliders[0], x: (pointX - (sliders[0].size.width*0.2)), y: pointY
-				  # actions.release
-				  # actions.perform	
-		      elsif sliders[0].value == '70%'
-	  		 #  	  pointX = (sliders[0].size.width*0.7) + sliders[0].location.x 
-			   #    pointY = puts sliders[0].location.y
-			   #    actions.press element: sliders[0], x:pointX , y: pointY
-				  # actions.move_to element: sliders[0], x: (pointX - (sliders[0].size.width*0.2)), y: pointY
-				  # actions.release
-				  # actions.perform	
-		      end
-		    sliders[2].should_not be nil
-
-	     end
+			      elsif sliders[0].value == '50%'
+			      	  moveSlider(sliders[0],0.5,0.2)
+			      	  sleep 2
+			      	  moveSlider(sliders[1],0.5,0.2)
+			      	  sleep 2
+			      	  moveSlider(sliders[2],0.5,-0.3)
+			      elsif sliders[0].value == '70%'
+			      	  moveSlider(sliders[0],0.7,-0.4)
+			      	  sleep 2
+			      	  moveSlider(sliders[1],0.7,-0.2)
+			      	  sleep 2
+			      	  moveSlider(sliders[2],0.7,-0.3)
+			      end
+			     sliders[2].should_not be nil
+		     end
+		  end
+		  screenshot("./screenshot/11.png")
+		  screenshot = driver.screenshot_as :base64
 		end
 	end
 
+	describe 'Vote Detail Page' do
+		it 'should be a logout button as user has voted already' do
+			logout_button = find_element(:name, 'Logout')
+			if logout_button != nil
+				
+			end
+		end
+
+		
+	end
 end
