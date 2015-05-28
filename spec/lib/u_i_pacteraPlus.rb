@@ -339,13 +339,18 @@ describe 'PacteraPulse UI' do
 	end
 
 	describe 'Vote Detail Page' do
-		it 'should be a logout button as user has voted already' do
+		it 'should be a logout button as user has voted already',:filePath=> 'screenshot/12.png' do
 			logout_button = find_element(:name, 'Logout')
 			if logout_button != nil
-				
+				logout_button.click
+				screenshot("./screenshot/11.png")
+		  		screenshot = driver.screenshot_as :base64
+		  		logout_button.should_not be nil
+		  	else
+		  		logout_button.should be nil
 			end
 		end
 
-		
+
 	end
 end
