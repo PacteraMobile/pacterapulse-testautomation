@@ -28,8 +28,9 @@ def desired_caps
       platformName: ENV["PLATFORM"],
       deviceName:  getDeviceName(),
       versionNumber:  getVersionNumber(),
-      app: getPackageName()
-      
+      app: getPackageName(),
+      appActivity:  'au.com.pactera.pacterapulse.MainActivity',
+      appWaitActivity:  'au.com.pactera.pacterapulse.core.SinglePaneActivity'      
     },
     appium_lib: {
       sauce_username: nil, # don't run on sauce
@@ -88,7 +89,7 @@ describe 'PacteraPulse UI' do
 		after :all do
 			startButton = getStartInWelcome()
 			if startButton.any?
-				startButton[0].click
+				startButton.click
 			end
 			set_wait 10
 		end
@@ -108,14 +109,18 @@ describe 'PacteraPulse UI' do
 
 	describe 'Login Page' do
 		before :all do
-			sleep 10
+      startButton = getStartInWelcome()
+      startButton.click
+			sleep 20
 		end
 		after :all do
 			sleep 10
 		end
 		it 'should have the authorization process'  do
-			webviews = find_elements(:class_name, 'UIAWebView')
-			if webviews.any?
+      screenshot = driver.screenshot_as :base64
+      screenshot('./screenshot/1.png')
+      webviews = getAuthenPageWebView()
+      if webviews.any?
 				webview = webviews[0]
 				inputfields =  webview.find_element(:name,"User account")
 				inputfields.type(getStaticUserName())
@@ -132,9 +137,14 @@ describe 'PacteraPulse UI' do
 			    signIn = webview.find_element(:name, 'Sign in')
 			    signIn.click;   
 			    sleep 7
-			    userName = webview.find_element(:name, 'Accept')
-			    userName.click
-			    webview.displayed?.should be true 
+			    webviews1 = getAcceptPageWebView()
+			    if webviews1.any?
+			      acceptBtn = webviews1[0].find_element(:name, 'Accept')
+			      acceptBtn.displayed?.should be true
+            acceptBtn.click
+			    else
+            webviews1.displayed?.should be nil
+			    end
 			else
 				webviews.should be nil
 			end
@@ -195,19 +205,27 @@ describe 'PacteraPulse UI' do
 
 	describe 'Show the result page ' do
 		after :all do
-     		back_click
-    	end
+        if( ENV["PLATFORM"] == 'iOS') then
+            back_click
+        else
+            #back()
+        end    		
+    end
 		it 'can click result button' ,:filePath=> 'screenshot/4.png' do
-      		getReslutButtonInVote().click
-			reusltPage = getInsideResult()
-			screenshot = driver.screenshot_as :base64
-			screenshot("./screenshot/4.png")
-			check_error
-			if !@error
-				reusltPage.displayed?.should be true
-			else
-				reusltPage.displayed?.should be false
-			end
+      if( ENV["PLATFORM"] == 'iOS') then
+        getReslutButtonInVote().click
+  			reusltPage = getInsideResult()
+  			screenshot = driver.screenshot_as :base64
+  			screenshot("./screenshot/4.png")
+  			check_error
+  			if !@error
+  				reusltPage.displayed?.should be true
+  			else
+  				reusltPage.displayed?.should be false
+  			end
+      else
+        #back()
+      end
 		end
 	end
 
@@ -216,38 +234,68 @@ describe 'PacteraPulse UI' do
      		set_wait 3
     	end
 		it 'can click happy button',:filePath=> 'screenshot/5.png'  do
-      		getHappyButton().click
+      sleep 2
+      getHappyButton().click
 			screenshot = driver.screenshot_as :base64
 			screenshot("./screenshot/5.png")
 			check_error
-			if !@error
-				back_click
-			end
+			sleep 5
+      if( ENV["PLATFORM"] == 'iOS') then
+  			if !@error
+  				back_click
+  			end
+      else
+        back()
+      end
 		end
 
 
 		it 'can click unHappy button',:filePath=> 'screenshot/6.png'  do
-      		getUnhappyButton().click
+      sleep 2
+      getUnhappyButton().click
 			screenshot = driver.screenshot_as :base64
 			screenshot("./screenshot/6.png")
 			check_error
-			if !@error
-				back_click
-			end
+      sleep 5
+            if( ENV["PLATFORM"] == 'iOS') then
+              if !@error
+                back_click
+              end
+            else
+              back()
+            end
 		end
 
 		it 'can click soso button',:filePath=> 'screenshot/7.png'  do
-      		getNetrualButton().click
+      sleep 2
+      getNetrualButton().click
 			screenshot = driver.screenshot_as :base64
 			screenshot("./screenshot/7.png")
 			check_error
+      sleep 5
+            if( ENV["PLATFORM"] == 'iOS') then
+              if !@error
+                back_click
+              end
+            else
+              back()
+            end
 		end
 
 		it 'can click soso button',:filePath=> 'screenshot/8.png'  do
-      		find_element(:name,'7 Days').click
+      sleep 2
+      find_element(:name,'7 Days').click
 			screenshot = driver.screenshot_as :base64
 			screenshot("./screenshot/8.png")
 			check_error
+      sleep 5
+            if( ENV["PLATFORM"] == 'iOS') then
+              if !@error
+                back_click
+              end
+            else
+              back()
+            end
 		end	
 
 		it 'can click soso button',:filePath=> 'screenshot/9.png'  do
@@ -255,6 +303,14 @@ describe 'PacteraPulse UI' do
 			screenshot = driver.screenshot_as :base64
 			screenshot("./screenshot/9.png")
 			check_error
+      sleep 5
+            if( ENV["PLATFORM"] == 'iOS') then
+              if !@error
+                back_click
+              end
+            else
+              back()
+            end
 		end		
 	end
 
